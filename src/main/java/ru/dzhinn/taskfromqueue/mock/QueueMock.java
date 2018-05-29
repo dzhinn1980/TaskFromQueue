@@ -1,4 +1,7 @@
-package ru.dzhinn.taskfromqueue;
+package ru.dzhinn.taskfromqueue.mock;
+
+import ru.dzhinn.taskfromqueue.Queue;
+import ru.dzhinn.taskfromqueue.Task;
 
 public class QueueMock implements Queue {
 
