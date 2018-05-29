@@ -3,6 +3,9 @@ package ru.dzhinn.taskfromqueue.service;
 import org.apache.log4j.Logger;
 import ru.dzhinn.taskfromqueue.Task;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public abstract class TaskService {
 
     final static Logger logger = Logger.getLogger(TaskService.class);
@@ -14,16 +17,11 @@ public abstract class TaskService {
             getTaskResults().saveResult(task, getTask1Service().doTask(task));
         } else if (task.getTaskType() == 2){
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    int subsystemTaskId = getTask2AsyncService().scheduleTask(task);
-                    Object result = null;
-                    while ((result = getTask2AsyncService().getStatus(subsystemTaskId)) == null){
-                        getTaskResults().saveResult(task, result);
-                    }
-                }
-            }).start();
+            int subsystemTaskId = getTask2AsyncService().scheduleTask(task);
+            Object result = null;
+            while ((result = getTask2AsyncService().getStatus(subsystemTaskId)) == null){
+                getTaskResults().saveResult(task, result);
+            }
 
 
         } else {

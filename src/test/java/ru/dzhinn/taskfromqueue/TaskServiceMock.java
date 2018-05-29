@@ -17,7 +17,7 @@ public class TaskServiceMock extends TaskService {
         return new Task1Service() {
             @Override
             public void prepareForTask(Task t) {
-                logger.info("Task " + t.getTaskId() + " prepared");
+                logger.info("Task " + t.getTaskId() + " prepared; thread: " + Thread.currentThread().getName());
             }
 
             @Override
@@ -34,7 +34,7 @@ public class TaskServiceMock extends TaskService {
             @Override
             public int scheduleTask(final Task t) {
 
-                logger.info("Task " + t.getTaskId() + " scheduled");
+                logger.info("Task " + t.getTaskId() + " scheduled; thread: " + Thread.currentThread().getName());
 
                 return t.getTaskId();
             }
