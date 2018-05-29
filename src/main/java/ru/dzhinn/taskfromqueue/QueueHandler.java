@@ -1,6 +1,7 @@
 package ru.dzhinn.taskfromqueue;
 
 import org.apache.log4j.Logger;
+import ru.dzhinn.taskfromqueue.service.TaskService;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -20,17 +21,26 @@ public class QueueHandler extends TimerTask {
 
     private Queue queue;
 
+    private TaskService taskService;
+
     private Date firstTime;
     private Long period;
 
-    public void handle(Queue queue){
+    private boolean alwaysRun;
+
+    public void handle(Queue queue, TaskService taskService){
         this.queue = queue;
+        this.taskService = taskService;
         init();
         runTimer();
     }
 
+    public void setAlwaysRun(boolean alwaysRun) {
+        this.alwaysRun = alwaysRun;
+    }
+
     private void runTimer(){
-        if (firstTime.before(new Date())) return;
+        if (!alwaysRun && firstTime.before(new Date())) return;
         Timer timer = new Timer();
         timer.schedule(this, firstTime, period);
     }
@@ -62,6 +72,8 @@ public class QueueHandler extends TimerTask {
         Task task = null;
         while ((task = queue.getNextTask()) != null){
             logger.info("Task with id = " + task.getTaskId() + " start at: " + new Date());
+
+            taskService.runTask(task);
         }
 
         queue.disconnect();

@@ -1,6 +1,6 @@
 package ru.dzhinn.taskfromqueue;
 
-public class TaskMock implements Task{
+public class TaskMock implements Task {
 
     private int taskId;
 
@@ -15,7 +15,7 @@ public class TaskMock implements Task{
 
     @Override
     public int getTaskType() {
-        return 0;
+        return taskId%2 + 1;
     }
 
     @Override
